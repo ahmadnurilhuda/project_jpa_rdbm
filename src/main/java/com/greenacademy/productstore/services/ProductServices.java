@@ -2,6 +2,7 @@ package com.greenacademy.productstore.services;
 
 import java.time.Instant;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greenacademy.productstore.models.Product;
@@ -15,8 +16,8 @@ public class ProductServices {
         this.productRepository = productRepository;
     }
 
-    public Iterable<Product> getAll() {
-        return productRepository.findAll();
+    public Iterable<Product> getAll(String name, String sku, Sort sort) {
+        return productRepository.findAllByNameAndSku(name, sku, sort);
     }
 
     public Product getById(Integer id) {
@@ -60,5 +61,9 @@ public class ProductServices {
 
     public void delete(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    public Iterable<Product> getByCategory(Integer id) {
+        return productRepository.findByCategoryId(id);
     }
 }

@@ -6,40 +6,14 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <h1>Products</h1>
+    <h1 th:text="${'List Products in Category ' + category.name}"></h1>
 
-    <div class="mt-5">
+    <div>
         <a href="/products/create" class="btn btn-primary">New Product</a>
     </div>
-
-    <form action="" class="mt-5" method="get">
-        <div class="row">
-            <div class="col-lg-3">
-                <input th:value="${name}" type="text" name="name" class="form-control" placeholder="Search By Name">
-            </div>
-            <div class="col-lg-3">
-                <input  th:value="${sku}" type="text" name="sku" class="form-control" placeholder="Search By SKU">
-            </div>
-
-            <div class="col-lg-3">
-                    <select name="sort_by" id="" class="form-select">
-                        <option value="" selected>Sort By</option>
-                        <option value="highest_price" th:selected="${sortBy == 'highest_price' ? true : false}">Harga Tertinggi</option>
-                        <option value="lowest_price" th:selected="${sortBy == 'lowest_price' ? true : false}">Harga Terendah</option>
-                        <option value="newest" th:selected="${sortBy == 'newest' ? true : false}">Terbaru</option>
-                        <option value="oldest" th:selected="${sortBy == 'oldest' ? true : false}">Terlama</option>
-                        <option value="highest_quantity" th:selected="${sortBy == 'highest_quantity' ? true : false}">Stock Terbanyak</option>
-                        <option value="lowest_quantity" th:selected="${sortBy == 'lowest_quantity' ? true : false}">Stock Terkecil</option>
-                    </select>
-            </div>
-            <div class="col-lg-3">
-                <button type="submit" class="btn btn-outline-primary w-100">Search</button>
-            </div>
-        </div>
-    </form>
     <!-- <div th:if="${message}" class="alert alert-success" th:text="${message}"></div> -->
 
-    <table class="table table-striped mt-5">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>No</th>

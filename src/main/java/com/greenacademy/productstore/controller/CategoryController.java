@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.greenacademy.productstore.models.Category;
 import com.greenacademy.productstore.services.CategoryServices;
+import com.greenacademy.productstore.services.ProductServices;
 
 import groovy.lang.Binding;
 import jakarta.validation.Valid;
@@ -17,9 +18,11 @@ import jakarta.validation.Valid;
 @Controller
 public class CategoryController {
     private CategoryServices categoryServices;
+    private ProductServices productServices;
 
-    public CategoryController(CategoryServices categoryServices) {
+    public CategoryController(CategoryServices categoryServices, ProductServices productServices) {
         this.categoryServices = categoryServices;
+        this.productServices = productServices;
     }
 
     @GetMapping("/categories")
@@ -70,5 +73,12 @@ public class CategoryController {
     public String delete(@PathVariable("id") Integer id) {
         categoryServices.delete(id);
         return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/{id}")
+    public String show(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("products", productServices.getByCategory(id));
+        model.addAttribute("category", categoryServices.getById(id));
+        return "pages/categories/show";
     }
 }
