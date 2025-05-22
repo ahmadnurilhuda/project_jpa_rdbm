@@ -22,14 +22,14 @@
             </div>
 
             <div class="col-lg-3">
-                    <select name="sort_by" id="" class="form-select">
+                    <select name="sort" id="" class="form-select">
                         <option value="" selected>Sort By</option>
-                        <option value="highest_price" th:selected="${sortBy == 'highest_price' ? true : false}">Harga Tertinggi</option>
-                        <option value="lowest_price" th:selected="${sortBy == 'lowest_price' ? true : false}">Harga Terendah</option>
-                        <option value="newest" th:selected="${sortBy == 'newest' ? true : false}">Terbaru</option>
-                        <option value="oldest" th:selected="${sortBy == 'oldest' ? true : false}">Terlama</option>
-                        <option value="highest_quantity" th:selected="${sortBy == 'highest_quantity' ? true : false}">Stock Terbanyak</option>
-                        <option value="lowest_quantity" th:selected="${sortBy == 'lowest_quantity' ? true : false}">Stock Terkecil</option>
+                        <option value="price,desc" th:selected="${sort == 'price,desc' ? true : false}">Harga Tertinggi</option>
+                        <option value="price,asc" th:selected="${sort == 'price,asc' ? true : false}">Harga Terendah</option>
+                        <option value="created_at,desc" th:selected="${sort == 'created_at,desc' ? true : false}">Terbaru</option>
+                        <option value="created_at,asc" th:selected="${sort == 'created_at,asc' ? true : false}">Terlama</option>
+                        <option value="quantity,desc" th:selected="${sort == 'quantity,desc' ? true : false}">Stock Terbanyak</option>
+                        <option value="quantity,asc" th:selected="${sort == 'quantity,asc' ? true : false}">Stock Terkecil</option>
                     </select>
             </div>
             <div class="col-lg-3">
@@ -58,7 +58,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="product, stat : ${products}">
+            <tr th:each="product, stat : ${products.content}">
                 <td th:text="${stat.count}"></td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.description}"></td>
@@ -81,6 +81,30 @@
             </tr>
         </tbody>
     </table>
+
+    <nav aria-label="..." class="mt-5" th:if="${metadata['totalPages'] != 0}">
+        <ul class="pagination justify-content-center" >
+            <li class="page-item">
+                <a th:href="@{/products(name=${name}, sku=${sku}, sort=${sort}, page=${metadata.number - 1})}"
+                    class="page-link"
+                    th:classappend="${metadata['number'] == 0 ? 'disabled' : ''}"
+                >Previous</a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(0, metadata.totalPages - 1)}">
+                <a class="page-link"
+                    th:classappend="${metadata['number'] == page ? 'active' : ''}"
+                    th:href="@{/products(name=${name}, sku=${sku}, sort=${sort}, page=${page})}"
+                    th:text="${page + 1}"></a>
+            </li>
+            <!-- th:href="${'?name=' + name + '&sku=' + sku + '&sort=' + sort + '&page=' + page}" -->
+            <li class="page-item">
+                <a class="page-link"
+                    th:classappend="${metadata['number'] == metadata['totalPages'] - 1 ? 'disabled' : ''}"
+                    th:href="@{/products(name=${name}, sku=${sku}, sort=${sort}, page=${metadata.number + 1})}"
+                >Next</a>
+            </li>
+        </ul>
+      </nav>
 </main>
 </body>
 </html>

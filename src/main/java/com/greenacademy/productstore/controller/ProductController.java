@@ -1,6 +1,9 @@
 package com.greenacademy.productstore.controller;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,41 +34,24 @@ public class ProductController {
     public String index(Model model,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "sku", required = false) String sku,
-            @RequestParam(value = "sort_by", required = false) String sortBy) {
+            @RequestParam(value = "sort", required = false) String sort,
+            Pageable pageable) {
         
 
         System.out.println("name: " + name);
         System.out.println("sku: " + sku);
-        System.out.println("sortBy: " + sortBy);
+        System.out.println("sort: " + sort);
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "created_at");
 
-        if (sortBy != null && !sortBy.isEmpty()) {
-            switch (sortBy) {
-                case "oldest":
-                    sort = Sort.by(Sort.Direction.ASC, "created_at");
-                    break;
-                case "highest_price":
-                    sort = Sort.by(Sort.Direction.DESC, "price");
-                    break;
-                case "lowest_price":
-                    sort = Sort.by(Sort.Direction.ASC, "price");
-                    break;
-                case "highest_quantity":
-                    sort = Sort.by(Sort.Direction.DESC, "quantity");
-                    break;
-                case "lowest_quantity":
-                    sort = Sort.by(Sort.Direction.ASC, "quantity");
-                    break;
-                default:
-                    break;
-            }
-        }
-        model.addAttribute("products", productServices.getAll(name, sku, sort));
+        pageable = PageRequest.of(pageable.getPageNumber(), 10,pageable.getSort());
+        PagedModel<Product> products = new PagedModel<>(productServices.getAll(name, sku, pageable));
 
-        model.addAttribute("name", name);
-        model.addAttribute("sku", sku);
-        model.addAttribute("sortBy", sort);
+
+        model.addAttribute("products",products);
+        model.addAttribute("metadata", products.getMetadata());
+        model.addAttribute("name", name == null ? "" : name);
+        model.addAttribute("sku", sku == null ? "" : sku);
+        model.addAttribute("sort", sort == null ? "" : sort);
         return "pages/products/index";
     }
 

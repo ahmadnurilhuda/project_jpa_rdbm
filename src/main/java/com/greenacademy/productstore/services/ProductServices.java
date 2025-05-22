@@ -2,7 +2,8 @@ package com.greenacademy.productstore.services;
 
 import java.time.Instant;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.greenacademy.productstore.models.Product;
@@ -16,8 +17,8 @@ public class ProductServices {
         this.productRepository = productRepository;
     }
 
-    public Iterable<Product> getAll(String name, String sku, Sort sort) {
-        return productRepository.findAllByNameAndSku(name, sku, sort);
+    public Page<Product> getAll(String name, String sku, Pageable pageable) {
+        return productRepository.findAllByNameAndSku(name, sku, pageable);
     }
 
     public Product getById(Integer id) {

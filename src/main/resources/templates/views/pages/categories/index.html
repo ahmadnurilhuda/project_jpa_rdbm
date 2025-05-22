@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="category, stat : ${categories}">
+            <tr th:each="category, stat : ${categories.content}">
                 <td th:text="${stat.count}"></td>
                 <td th:text="${category.name}"></td>
                 <td th:text="${category.description}"></td>
@@ -47,6 +47,23 @@
             </tr>
         </tbody>
     </table>
+
+    <nav aria-label="Page navigation example" th:if="${metadata['totalPages'] != 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${metadata['number'] == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/categories(page=${metadata['number'] - 1})}">Previous</a>
+            </li>
+            <li class="page-item"
+                th:each="page : ${#numbers.sequence(0, metadata['totalPages'] - 1)}"
+                th:classappend="${metadata['number'] == page} ? 'active'">
+                <a class="page-link" th:href="@{/categories(page=${page})}" th:text="${page + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${metadata['number'] == metadata['totalPages'] - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/categories(page=${metadata['number'] + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+    
 </main>
 </body>
 </html>

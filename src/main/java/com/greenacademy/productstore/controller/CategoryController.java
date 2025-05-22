@@ -1,5 +1,9 @@
 package com.greenacademy.productstore.controller;
 
+import org.hibernate.query.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,8 +30,13 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public String index(Model model) {
-        model.addAttribute("categories", categoryServices.getAll());
+    public String index(Model model, Pageable pageable) {
+
+        pageable = PageRequest.of(pageable.getPageNumber(), 10,pageable.getSort());
+        PagedModel<Category> categories = new PagedModel<>(categoryServices.getAllPage(pageable));
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("metadata", categories.getMetadata());
         return "pages/categories/index";
     }
     

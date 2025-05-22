@@ -2,6 +2,8 @@ package com.greenacademy.productstore.services;
 
 import java.time.Instant;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.greenacademy.productstore.models.Category;
@@ -17,6 +19,10 @@ public class CategoryServices {
 
     public Iterable<Category> getAll() {
         return categoryRepository.findAll();
+    }
+
+    public Page<Category> getAllPage(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
     }
 
     public Category getById(Integer id) {
