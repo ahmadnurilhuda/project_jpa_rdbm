@@ -60,7 +60,10 @@
         <tbody>
             <tr th:each="product, stat : ${products.content}">
                 <td th:text="${stat.count}"></td>
-                <td th:text="${product.name}"></td>
+                <td>
+                    <img width="50" src="" th:src="${product.imageUrl}" class="img-fluid" th:alt="${product.name}">
+                    <span th:text="${product.name}"></span>
+                </td>
                 <td th:text="${product.description}"></td>
                 <td th:text="${product.sku}"></td>
                 <td th:text="${product.price}"></td>

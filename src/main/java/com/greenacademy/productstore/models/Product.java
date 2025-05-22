@@ -46,6 +46,9 @@ public class Product {
     @NotNull(message = "Discount is required")
     private Double discount;
 
+    @Column(nullable = false)
+    private String imageUrl;
+
     // semua product hanya ada 1 category, gunakan many to one
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -158,5 +161,13 @@ public class Product {
 
     public void setUpdated_at(Instant updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

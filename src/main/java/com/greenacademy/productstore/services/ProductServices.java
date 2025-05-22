@@ -1,10 +1,15 @@
 package com.greenacademy.productstore.services;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.greenacademy.productstore.models.Product;
 import com.greenacademy.productstore.repositories.ProductRepository;
@@ -25,20 +30,37 @@ public class ProductServices {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Product create(Product newProduct) {
+    public Product create(Product newProduct, MultipartFile productImage) {
+        // Simpan file gambar dan dapatkan URL-nya
+        String imageUrl = saveImage(productImage);
+        newProduct.setImageUrl(imageUrl);
+    
+        // Simpan produk setelah semua field wajib sudah terisi
+        return productRepository.save(newProduct);
+    }
+    
+    private String saveImage(MultipartFile productImage) {
+        try {
 
-        productRepository.save(newProduct);
+            String orginalFileName = productImage.getOriginalFilename();
+            String extension = orginalFileName.substring(orginalFileName.lastIndexOf("."));
+            String fileName = UUID.randomUUID().toString() + extension;
 
-        // for(Product product : productRepository.findAll()) {
-        //     if(product.getSku().equals(newProduct.getSku())) {
-        //         return null;
-        //     }
-        //     productRepository.save(newProduct);
-        // }
-        return newProduct;
+            String filePath = "src/main/resources/static/uploads/images/" + fileName;
+            Path targetPath = Path.of(filePath);
+
+            System.out.println(targetPath.toAbsolutePath()+" ini target path");
+
+            Files.copy(productImage.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+            return "/uploads/images/" + fileName;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Product update(Product product) {
+    public Product update(Product product, MultipartFile productImage) {
         Product existingProduct = productRepository.findById(product.getId()).orElse(null);
 
         if(existingProduct != null) {
@@ -55,14 +77,40 @@ public class ProductServices {
             existingProduct.setQuantity(product.getQuantity());
             existingProduct.setUpdated_at(Instant.now());
 
+            if(productImage != null) {
+                if(existingProduct.getImageUrl() != null) {
+                    deleteImage(existingProduct.getImageUrl());
+                }
+                String imageUrl = saveImage(productImage);
+                existingProduct.setImageUrl(imageUrl);
+            }
             productRepository.save(existingProduct);
         }
         return existingProduct;
     }
 
+    public void delete(Product product) {
+        productRepository.delete(product);
+
+        if(product.getImageUrl() != null) {
+            deleteImage(product.getImageUrl());
+        }       
+    }
+
+    private void deleteImage (String imageUrl) {
+        String filePath = "src/main/resources/static"+imageUrl;
+        Path targetPath = Path.of(filePath);
+        try {
+            Files.deleteIfExists(targetPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void delete(Integer id) {
         productRepository.deleteById(id);
     }
+    
 
     public Iterable<Product> getByCategory(Integer id) {
         return productRepository.findByCategoryId(id);
