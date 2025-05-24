@@ -37,7 +37,7 @@ public class ProductController {
         this.productServices = productServices;
     }
 
-    @GetMapping("/products")
+    @GetMapping("/admin/products")
     public String index(Model model,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "sku", required = false) String sku,
@@ -59,14 +59,14 @@ public class ProductController {
         return "pages/products/index";
     }
 
-    @GetMapping("/products/create")
+    @GetMapping("/admin/products/create")
     public String create(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryServices.getAll());
         return "pages/products/create";
     }
 
-    @PostMapping("/products")
+    @PostMapping("/admin/products")
     public String store(@Valid @ModelAttribute("product") Product product, BindingResult result, Model model,
             @RequestParam("image") MultipartFile productImage) {
 
@@ -76,19 +76,19 @@ public class ProductController {
             return "pages/products/create";
         }
         productServices.create(product, productImage);
-        return "redirect:/products";
+        return "redirect:/admin/products";
     }
 
     // save image to folde
 
-    @GetMapping("/products/edit/{id}")
+    @GetMapping("/admin/products/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("product", productServices.getById(id));
         model.addAttribute("categories", categoryServices.getAll());
         return "pages/products/edit";
     }
 
-    @PostMapping("/products/{id}")
+    @PostMapping("/admin/products/{id}")
     public String update(@Valid @PathVariable("id") Integer id, @ModelAttribute("product") Product product,
             BindingResult result, Model model, @RequestParam("image") MultipartFile productImage) {
         if (result.hasErrors()) {
@@ -96,14 +96,13 @@ public class ProductController {
             return "pages/products/edit";
         }
         productServices.update(product, productImage);
-        return "redirect:/products";
+        return "redirect:/admin/products";
     }
 
-    @PostMapping("/products/delete/{id}")
+    @PostMapping("/admin/products/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
         Product product = productServices.getById(id);
         productServices.delete(product);
-        return "redirect:/products";
+        return "redirect:/admin/products";
     }
-
 }

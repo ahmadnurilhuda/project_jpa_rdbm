@@ -1,0 +1,64 @@
+<html lang="en" layout:decorate="~{layouts/main}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main layout:fragment="content">
+      <div class="container mt-5">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <!-- Card yang berisi form register -->
+            <div class="card shadow-lg rounded-4">
+              <div
+                class="card-header bg-primary text-white text-center rounded-top-4"
+              >
+                <h3 class="mb-0">Login</h3>
+              </div>
+               <div th:if="${error}" class="alert alert-success" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
+
+              <div class="card-body p-4">
+                <form action="/login" method="post">
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      name="password"
+                      required
+                    />
+                  </div>
+
+                  <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">
+                      Login
+                    </button>
+                  </div>
+
+                  <p class="text-center mt-3 mb-0">
+                    belum punya akun <a href="/register">Register Here</a>
+                  </p>
+                </form>
+              </div>
+            </div>
+            <!-- Akhir Card -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

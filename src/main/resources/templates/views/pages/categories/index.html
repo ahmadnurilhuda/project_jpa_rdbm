@@ -9,7 +9,7 @@
     <h1>Product Categories</h1>
 
     <div>
-        <a href="/categories/create" class="btn btn-primary">Create Category</a>
+        <a href="/admin/categories/create" class="btn btn-primary">Create Category</a>
     </div>
     <!-- <div th:if="${message}" class="alert alert-success" th:text="${message}"></div> -->
 
@@ -37,12 +37,12 @@
                 <td th:text="${#dates.format(category.updated_at, 'HH:mm:ss')}"></td>
 
                 <td class="d-flex gap-2 justify-content-center">
-                    <a class="btn btn-warning" th:href="@{/categories/edit/{id}(id=${category.id})}">Edit</a>
-                    <form class="btn btn-danger" th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this category?') ">
+                    <a class="btn btn-warning" th:href="@{/admin/categories/edit/{id}(id=${category.id})}">Edit</a>
+                    <form class="btn btn-danger" th:action="@{/admin/categories/delete/{id}(id=${category.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this category?') ">
                         <button type="submit" class="btn text-white p-0 m-0 border-0 shadow-none ">Delete</button>
                     </form>
                     
-                    <a th:href="@{/categories/{id}(id=${category.id})}" class="btn btn-info">Show Products</a>
+                    <a th:href="@{/admin/categories/{id}(id=${category.id})}" class="btn btn-info">Show Products</a>
                 </td>
             </tr>
         </tbody>
@@ -51,15 +51,15 @@
     <nav aria-label="Page navigation example" th:if="${metadata['totalPages'] != 0}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${metadata['number'] == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/categories(page=${metadata['number'] - 1})}">Previous</a>
+                <a class="page-link" th:href="@{/admin/categories(page=${metadata['number'] - 1})}">Previous</a>
             </li>
             <li class="page-item"
                 th:each="page : ${#numbers.sequence(0, metadata['totalPages'] - 1)}"
                 th:classappend="${metadata['number'] == page} ? 'active'">
-                <a class="page-link" th:href="@{/categories(page=${page})}" th:text="${page + 1}"></a>
+                <a class="page-link" th:href="@{/admin/categories(page=${page})}" th:text="${page + 1}"></a>
             </li>
             <li class="page-item" th:classappend="${metadata['number'] == metadata['totalPages'] - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/categories(page=${metadata['number'] + 1})}">Next</a>
+                <a class="page-link" th:href="@{/admin/categories(page=${metadata['number'] + 1})}">Next</a>
             </li>
         </ul>
     </nav>

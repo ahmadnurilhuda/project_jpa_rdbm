@@ -16,9 +16,14 @@
               </button>
               <div class="collapse navbar-collapse container" id="navbarNavAltMarkup">
                 <div class="navbar-nav ms-auto">
-                  <a class="nav-link active" aria-current="page" href="/">Home</a>
-                  <a class="nav-link" href="/products">Products</a>
-                  <a class="nav-link" href="/categories">categories</a>
+                  <a class="nav-link active" aria-current="page" href="/" th:if="${session.userRole != null}">Home</a>
+                  <a class="nav-link" href="/admin/products" th:if="${session.userRole == 'ADMIN'}">Products</a>
+                  <a class="nav-link" href="/admin/categories" th:if="${session.userRole == 'ADMIN'}">Categories</a>
+                  <a class="nav-link" href="/login" th:if="${session.userRole == null}">Login</a>
+                  <a class="nav-link" href="/register" th:if="${session.userRole == null}">Register</a>
+                  <form action="/logout" method="post">
+                    <button type="submit" class="btn btn-primary" th:if="${session.userRole != null}">Logout</button>
+                  </form>
                   <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </div>
               </div>

@@ -9,7 +9,7 @@
     <h1 th:text="${'List Products in Category ' + category.name}"></h1>
 
     <div>
-        <a href="/products/create" class="btn btn-primary">New Product</a>
+        <a href="/admin/products/create" class="btn btn-primary">New Product</a>
     </div>
     <!-- <div th:if="${message}" class="alert alert-success" th:text="${message}"></div> -->
 
@@ -47,8 +47,8 @@
                 <td th:text="${#dates.format(product.updated_at, 'HH:mm:ss')}"></td>
 
                 <td class="d-flex gap-2 justify-content-center">
-                    <a class="btn btn-warning container " th:href="@{/products/edit/{id}(id=${product.id})}">Edit</a>
-                    <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" class="container">
+                    <a class="btn btn-warning container " th:href="@{/admin/products/edit/{id}(id=${product.id})}">Edit</a>
+                    <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post" class="container">
                         <button class="btn btn-danger" type="submit" onClick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                     </form>
                 </td>

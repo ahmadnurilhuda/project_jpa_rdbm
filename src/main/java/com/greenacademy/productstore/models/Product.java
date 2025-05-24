@@ -63,10 +63,10 @@ public class Product {
     @CreationTimestamp
     private Instant created_at;
 
+    
     @UpdateTimestamp
     private Instant updated_at;
     
-
     public Product() {
     }
 

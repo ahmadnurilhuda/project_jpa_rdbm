@@ -29,7 +29,7 @@ public class CategoryController {
         this.productServices = productServices;
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/admin/categories")
     public String index(Model model, Pageable pageable) {
 
         pageable = PageRequest.of(pageable.getPageNumber(), 10,pageable.getSort());
@@ -40,13 +40,13 @@ public class CategoryController {
         return "pages/categories/index";
     }
     
-    @GetMapping("/categories/create")
+    @GetMapping("/admin/categories/create")
     public String create(Model model) {
         model.addAttribute("category", new Category(null, null));
         return "pages/categories/create";
     }
 
-    @PostMapping("/categories")
+    @PostMapping("/admin/categories")
     public String store(
         @Valid
         @ModelAttribute("category")Category category,
@@ -59,32 +59,32 @@ public class CategoryController {
         }
 
         categoryServices.create(category);
-        return "redirect:/categories";
+        return "redirect:/admin/categories";
     }
 
-    @GetMapping("/categories/edit/{id}")
+    @GetMapping("/admin/categories/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("category", categoryServices.getById(id));
         return "pages/categories/edit";
     }
 
-    @PostMapping("/categories/edit/{id}")
+    @PostMapping("/admin/categories/edit/{id}")
     public String update(@Valid @PathVariable("id") Integer id, @ModelAttribute("category") Category category, BindingResult result, Model model) {
         if(result.hasErrors()) {
             model.addAttribute("errors", result);
             return "pages/categories/edit";
         }
         categoryServices.update(category);
-        return "redirect:/categories";
+        return "redirect:/admin/categories";
     }
 
-    @PostMapping("/categories/delete/{id}")
+    @PostMapping("/admin/categories/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
         categoryServices.delete(id);
-        return "redirect:/categories";
+        return "redirect:/admin/categories";
     }
 
-    @GetMapping("/categories/{id}")
+    @GetMapping("/admin/categories/{id}")
     public String show(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("products", productServices.getByCategory(id));
         model.addAttribute("category", categoryServices.getById(id));
