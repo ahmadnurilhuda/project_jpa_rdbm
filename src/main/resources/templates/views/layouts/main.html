@@ -16,15 +16,34 @@
               </button>
               <div class="collapse navbar-collapse container" id="navbarNavAltMarkup">
                 <div class="navbar-nav ms-auto">
-                  <a class="nav-link active" aria-current="page" href="/" th:if="${session.userRole != null}">Home</a>
-                  <a class="nav-link" href="/admin/products" th:if="${session.userRole == 'ADMIN'}">Products</a>
-                  <a class="nav-link" href="/admin/categories" th:if="${session.userRole == 'ADMIN'}">Categories</a>
-                  <a class="nav-link" href="/login" th:if="${session.userRole == null}">Login</a>
-                  <a class="nav-link" href="/register" th:if="${session.userRole == null}">Register</a>
-                  <form action="/logout" method="post">
-                    <button type="submit" class="btn btn-primary" th:if="${session.userRole != null}">Logout</button>
-                  </form>
-                  <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                      <!-- Jika sudah login (USER atau ADMIN) -->
+                    <a class="nav-link active" aria-current="page" href="/" th:if="${session.userRole == 'ADMIN' || session.userRole == 'USER'}">Home</a>
+
+                    <!-- Khusus ADMIN -->
+                    <a class="nav-link" href="/admin/products" th:if="${session.userRole == 'ADMIN'}">Products</a>
+                    <a class="nav-link" href="/admin/categories" th:if="${session.userRole == 'ADMIN'}">Categories</a>
+
+                    <!-- Khusus USER -->
+                    <a class="nav-link" href="/carts" th:if="${session.userRole == 'USER'}">Cart</a>
+                    <a href="/order-history" class="nav-link" th:if="${session.userRole == 'USER'}">Order History</a>
+
+
+                    <!-- Khusus belum login -->
+                    <a class="nav-link" href="/login" th:if="${session.userRole == null}">Login</a>
+                    <a class="nav-link" href="/register" th:if="${session.userRole == null}">Register</a>
+
+                    <!-- Profile, tampil untuk user yang sudah login -->
+                    <li th:if="${session.user != null and session.user.id != null}">
+                    <a th:href="@{/profile}" class="nav-link">Profile</a></li>
+
+                    <!-- <a th:href="@{/profile}" class="nav-link" th:if="${session.user != null and session.user.id != null}}">Profile</a> -->
+
+
+                    <!-- Logout, hanya jika sudah login -->
+                    <form action="/logout" method="post" th:if="${session.userRole != null || session.userRole == null}">
+                      <button type="submit" class="btn btn-outline-primary">Logout</button>
+                    </form>
+
                 </div>
               </div>
             </div>

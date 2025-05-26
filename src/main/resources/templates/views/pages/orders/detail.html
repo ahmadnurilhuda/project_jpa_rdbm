@@ -1,0 +1,65 @@
+<html lang="en" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+</head>
+<body>
+
+    <main layout:fragment="content">
+
+        <div class="container mt-5">
+            <h2>Detail Order</h2>
+
+            <!-- Card Order -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: <strong>ORD-PRD- <span th:text="${order.id}">123</span></strong></h5>
+                    <p class="card-text">
+                        <strong>Amount:</strong> Rp <span th:text="${order.amount}">100000</span><br>
+                        <strong>Status:</strong> <span th:text="${order.status}">PENDING</span><br>
+                        <strong>Created At:</strong> <span th:text="${#temporals.format(order.created_at, 'dd MMM yyyy HH:mm')}">01 Jan 2024</span>
+                    </p>
+                    <a th:href="@{/order-history}" class="btn btn-secondary btn-sm">← Kembali ke Riwayat</a>
+                </div>
+            </div>
+
+            <!-- Tabel Order Items -->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Produk</th>
+                            <th>Harga</th>
+                            <th>Qty</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item, iterStat : ${orderItems}">
+                            <td th:text="${iterStat.count}">1</td>
+                            <td>
+                                <img width="50" src="" th:src="${item.product.imageUrl}" class="img-fluid" th:alt="${item.product.name}">
+                                <span th:text="${item.product.name}"></span>
+                            </td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${item.quantity}">2</td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 2, 'POINT')}"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end fw-bold">Total:</td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 2, 'POINT')}"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    
+</body>
+</html>

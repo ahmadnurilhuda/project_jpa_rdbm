@@ -1,0 +1,76 @@
+<html lang="en" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-lg rounded-4">
+                        <div class="card-body p-4">
+                        <h3 class="mb-4 text-center">Edit Profile</h3>
+
+                        <form action="/profile/edit" method="post">
+                            <input type="hidden" name="id" th:value="${user.id}" />
+
+                            <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input
+                                type="text"
+                                class="form-control"
+                                name="username"
+                                th:value="${user.username}"
+                                required
+                                />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input
+                                type="email"
+                                class="form-control"
+                                name="email"
+                                th:value="${user.email}"
+                                required
+                                />
+                            </div>
+                            </div>
+
+                            <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="phone"
+                                th:value="${user.phone}"
+                                required
+                            />
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Update</button>
+                            </div>
+                        </form>
+
+                        <div class="row mt-4 g-2">
+                            <div class="col-md-4 d-grid">
+                            <a href="/" class="btn btn-outline-secondary">Back to Home</a>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                            <a href="/profile" class="btn btn-outline-primary">Back to Profile</a>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                            <a href="/profile/password" class="btn btn-warning">Edit Password</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
