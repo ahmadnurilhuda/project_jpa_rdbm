@@ -18,9 +18,9 @@
                     <p class="card-text">
                         <strong>Amount:</strong> Rp <span th:text="${order.amount}">100000</span><br>
                         <strong>Status:</strong> <span th:text="${order.status}">PENDING</span><br>
-                        <strong>Created At:</strong> <span th:text="${#temporals.format(order.created_at, 'dd MMM yyyy HH:mm')}">01 Jan 2024</span>
+                        <strong>Date :</strong> <span th:text="${#temporals.format(order.created_at, 'dd MMM yyyy HH:mm')}">01 Jan 2024</span>
                     </p>
-                    <a th:href="@{/order-history}" class="btn btn-secondary btn-sm">← Kembali ke Riwayat</a>
+                    <a th:href="@{/order-history}" class="btn btn-outline-primary btn-sm">Kembali ke Riwayat</a>
                 </div>
             </div>
 

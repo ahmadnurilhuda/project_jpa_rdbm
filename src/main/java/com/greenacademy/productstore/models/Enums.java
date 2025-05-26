@@ -6,6 +6,6 @@ public class Enums {
     }
 
     public enum Status {
-        PENDING, PROCCESSED, COMPLETED, CANCELLED
+        PENDING, PROCESSED, COMPLETED, CANCELLED
     }
 }

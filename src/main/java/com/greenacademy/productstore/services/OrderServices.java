@@ -53,4 +53,14 @@ public class OrderServices {
         return orderItemRepository.findByOrderId(id);
     }
 
+    public Iterable<Order> getAll() {
+        return orderRepository.findAll();
+    }
+
+    public void updateStatus(Integer id, String status) {
+        Order order = orderRepository.findById(id).get();
+        order.setStatus(Status.valueOf(status));
+        orderRepository.save(order);
+    }
+
 }

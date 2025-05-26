@@ -35,7 +35,7 @@ public class Order {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "status")
     private Enums.Status status;
 
     @CreationTimestamp
