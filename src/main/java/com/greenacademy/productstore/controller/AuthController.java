@@ -51,7 +51,8 @@ public class AuthController {
                 System.out.println("\n\n\nUser username: " + user.getUsername()+"\n\n\n");
 
                 String prevPage = (String) session.getAttribute("prevPage");
-                if(prevPage != null) {
+                String prevMethod = (String) session.getAttribute("prevMethod");
+                if(prevPage != null && prevMethod != null && prevMethod.equals("GET")) {
                     return "redirect:" + prevPage;
                 }
             }

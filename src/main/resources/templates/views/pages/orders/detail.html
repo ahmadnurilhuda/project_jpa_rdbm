@@ -14,12 +14,20 @@
             <!-- Card Order -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Order ID: <strong>ORD-PRD- <span th:text="${order.id}">123</span></strong></h5>
-                    <p class="card-text">
-                        <strong>Amount:</strong> Rp <span th:text="${order.amount}">100000</span><br>
-                        <strong>Status:</strong> <span th:text="${order.status}">PENDING</span><br>
-                        <strong>Date :</strong> <span th:text="${#temporals.format(order.created_at, 'dd MMM yyyy HH:mm')}">01 Jan 2024</span>
+                    <h5 class="card-title">Order ID : <strong>ORD-PRD- <span th:text="${order.id}"></span></strong></h5>
+                    <p class="card-text fs-5">
+                        <strong>Amount : </strong><span th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 0, 'POINT')}"></span><br>
+                        <span th:text="${order.status}"
+                            class="badge mt-3 mb-3"
+                            th:classappend="${order.status.name == 'PENDING' ? ' bg-warning text-dark' : 
+                                            order.status.name == 'PROCESSED' ? ' bg-primary' : 
+                                            order.status.name == 'COMPLETED' ? ' bg-success' : 
+                                            order.status.name == 'CANCELED' ? ' bg-danger' : ''}">
+                        </span><br>
+                        <strong>Date :</strong> <span th:text="${#temporals.format(order.created_at, 'dd MMM yyyy HH:mm')}">01 Jan 2024</span><br>
+                        <strong class="text-danger">Discount : </strong><span th:text="${#numbers.formatDecimal(order.discount, 0, 'COMMA', 0, 'POINT')}" class="text-danger"></span>
                     </p>
+
                     <a th:href="@{/order-history}" class="btn btn-outline-primary btn-sm">Kembali ke Riwayat</a>
                 </div>
             </div>
@@ -45,13 +53,17 @@
                             </td>
                             <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
                             <td th:text="${item.quantity}">2</td>
-                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT')}"></td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
+                            <td colspan="4" class="text-end fw-bold text-danger">Discount:</td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(order.discount, 0, 'COMMA', 0, 'POINT')}" class="text-danger"></td>
+                        </tr>
+                        <tr>
                             <td colspan="4" class="text-end fw-bold">Total:</td>
-                            <td th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 0, 'POINT')}"></td>
                         </tr>
                     </tfoot>
                 </table>

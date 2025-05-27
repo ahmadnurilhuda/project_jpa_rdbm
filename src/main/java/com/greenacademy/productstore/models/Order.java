@@ -34,6 +34,11 @@ public class Order {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "voucher_code")
+    private String voucherCode;
+
+    private BigDecimal discount;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "status")
     private Enums.Status status;
@@ -47,10 +52,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(User user, BigDecimal amount, Status status) {
+    public Order(User user, BigDecimal amount, Status status, String voucherCode, BigDecimal discount) {
         this.user = user;
         this.amount = amount;
         this.status = status;
+        this.voucherCode = voucherCode;
+        this.discount = discount;
         this.created_at = Instant.now();
         this.updated_at = Instant.now();
     }
@@ -97,6 +104,22 @@ public class Order {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getVoucherCode() {
+        return voucherCode;
+    }
+
+    public void setVoucherCode(String voucherCode) {
+        this.voucherCode = voucherCode;
+    }
+
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 
 }

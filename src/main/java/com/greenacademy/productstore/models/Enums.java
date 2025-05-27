@@ -8,4 +8,8 @@ public class Enums {
     public enum Status {
         PENDING, PROCESSED, COMPLETED, CANCELLED
     }
+
+    public enum DiscountType {
+        FIXED, PERCENTAGE
+    }
 }

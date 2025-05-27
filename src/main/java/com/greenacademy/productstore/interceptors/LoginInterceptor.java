@@ -19,6 +19,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // simpan halaman sebelum login
         request.getSession().setAttribute("prevPage", requestURI);
+
+        // simpan method request
+        request.getSession().setAttribute("prevMethod", request.getMethod());
         // simpan user yang sedang login
         User user = (User) request.getSession().getAttribute("user");
 

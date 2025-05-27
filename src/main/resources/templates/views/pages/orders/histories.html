@@ -13,8 +13,19 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title">Order ID: <strong>ORD-PRD-<span th:text="${order.id}"></span></strong></h5>
-                        <p class="card-text">Amount: <strong><span th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 2, 'POINT')}"></span></strong></p>
-                        <p class="card-text">Status: <strong><span th:text="${order.status}"></span></strong></p>
+                        <p class="card-text">Amount: <strong><span th:text="'Rp ' + ${#numbers.formatDecimal(order.amount, 0, 'COMMA', 0, 'POINT')}"></span></strong></p>
+                      
+                        <p class="card-text fs-6">
+                            <strong>
+                                <span th:text="${order.status}"
+                                    class="badge"
+                                    th:classappend="${order.status.name == 'PENDING' ? 'bg-warning text-dark' : 
+                                                    order.status.name == 'PROCESSED' ? 'bg-primary' : 
+                                                    order.status.name == 'COMPLETED' ? 'bg-success' : 
+                                                    order.status.name == 'CANCELED' ? 'bg-danger' : ''}">
+                                </span>
+                            </strong>
+                        </p>
                         <p class="card-text">Date: <strong><span th:text="${#temporals.format(order.created_at, 'yyyy-MM-dd HH:mm')}"></span></strong></p>
                         <a th:href="@{/order-history/{id}(id=${order.id})}" class="btn btn-primary">View Detail</a>
                     </div>

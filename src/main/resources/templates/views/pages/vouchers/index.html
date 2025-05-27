@@ -1,0 +1,63 @@
+<html lang="en" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vouchers Management</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="container mt-4">
+            <h2 class="mb-4">Daftar Voucher</h2>
+            <div class="mb-4">
+                <a href="/admin/vouchers/create" class="btn btn-primary">Tambah Voucher</a>
+            </div>
+            <div class="table-responsive mt-4" th:if="${vouchers.content.size() > 0}">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Kode</th>
+                            <th>Tipe Diskon</th>
+                            <th>Diskon</th>
+                            <th>Jumlah</th>
+                            <th>Dibuat</th>
+                            <th>Diperbarui</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="voucher, iterStat : ${vouchers.content}">
+                            <td class="text-center" th:text="${iterStat.count}"></td>
+                            <td th:text="${voucher.name}"></td>
+                            <td th:text="${voucher.code}"></td>
+                            <td th:text="${voucher.discountType}"></td>
+                            <td class="text-end">
+                                <span th:if="${voucher.discountType.name == 'PERCENTAGE'}" th:text="${#numbers.formatDecimal(voucher.discount, 0, 'COMMA', 0, 'POINT')}+'%'"></span>
+                                <span th:if="${voucher.discountType.name == 'FIXED'}" th:text="'Rp ' + ${#numbers.formatDecimal(voucher.discount, 0, 'COMMA', 0, 'POINT')}"></span>
+                            </td>
+                            <td class="text-center" th:text="${voucher.quantity}">100</td>
+                            <td class="text-center"
+                                th:text="${#temporals.format(voucher.createdAt, 'dd MMM yyyy HH:mm')}">
+                            </td>
+                            <td class="text-center"
+                                th:text="${#temporals.format(voucher.updatedAt, 'dd MMM yyyy HH:mm')}">
+                            </td>
+                            <td class="d-flex gap-2 justify-content-center">
+                                <a class="btn btn-warning" th:href="@{/admin/vouchers/edit/{id}(id=${voucher.id})}">Edit</a>
+                                <form th:action="@{/admin/vouchers/delete/{id}(id=${voucher.id})}" method="post" class="container">
+                                    <button class="btn btn-danger" type="submit" onClick="return confirm('Are you sure you want to delete this voucher?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="alert alert-info" th:if="${vouchers.content.size() == 0}">
+                Belum ada voucher
+            </div>
+        </div>
+    </main>
+    
+</body>
+</html>

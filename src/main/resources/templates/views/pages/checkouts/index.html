@@ -8,11 +8,7 @@
 
     <main layout:fragment="content">
         <div class="container my-5">
-            <h2 class="mb-4">Keranjang Belanja</h2>
-
-            <div th:if="${#lists.isEmpty(cartItems)}">
-                <p>Keranjang Anda kosong.</p>
-            </div>
+            <h2 class="mb-4">Checkout</h2>
 
             <div class="row" th:each="item : ${cartItems}">
                 <div class="col-md-12 mb-3">
@@ -45,12 +41,6 @@
                                                 <strong th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 2, 'POINT')}">Rp 0</strong>
                                             </p>
                                         </div>
-                                        <div class="col-md-4">
-                                            <form action="/carts/remove" method="post">
-                                                <input type="hidden" name="cartItemId" th:value="${item.id}">
-                                                <button type="submit" class="btn btn-danger">Hapus</button>
-                                            </form>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -60,28 +50,55 @@
                 </div>
             </div>
 
-            <div class="row mt-4" th:if="${!#lists.isEmpty(cartItems)}">
-                <div class="col-md-12 text-end">
-                    <h4>Total Belanja: 
-                        <span th:text="'Rp ' + ${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}">Rp 0</span>
-                    </h4>
+            <!-- Ringkasan Belanja -->
+            <div class="row justify-content-end mb-4" th:if="${!#lists.isEmpty(cartItems)}">
+                <div class="col-md-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-end">
+                            <h5>Total Belanja:
+                                <span th:text="'Rp ' + ${#numbers.formatDecimal(amount, 0, 'COMMA', 2, 'POINT')}">Rp 0</span>
+                            </h5>
+                            <h5>Potongan:
+                                <span th:text="'Rp ' + ${#numbers.formatDecimal(discount, 0, 'COMMA', 2, 'POINT')}">Rp 0</span>
+                            </h5>
+                            <h4 class="fw-bold">Total Bayar:
+                                <span th:text="'Rp ' + ${#numbers.formatDecimal(amount - discount, 0, 'COMMA', 2, 'POINT')}">Rp 0</span>
+                            </h4>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Form Kode Voucher -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                       <!-- Pesan Error / Success -->
+                    <div class="mt-2">
+                        <div th:if="${error}" th:text="${error}" class="alert alert-danger"></div>
+                        <div th:if="${voucherCode}" th:text="${voucherCode +' Success!'}" class="alert alert-success"></div>
+                    </div>
 
-            <div class="row mt-4">
-                <div class="col-md-6 d-grid" th:classappend="${#lists.isEmpty(cartItems)} ? 'w-100'">
-                    <a href="/" class="btn btn-outline-primary" >Lanjutkan Belanja</a>
+                    <form action="/checkouts" method="get" class="input-group">
+                        <input type="text" th:value="${voucherCode}" class="form-control"
+                            name="voucherCode" placeholder="Masukkan Kode Voucher">
+                        <button class="btn btn-outline-primary" type="submit">Gunakan</button>
+                    </form>                 
+                </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="row mt-4 ms-auto">
+                <div class="col-md-6 d-grid">
+                    <a href="/" class="btn btn-outline-primary">Lanjutkan Belanja</a>
                 </div>
                 <div class="col-md-6 d-grid" th:if="${!#lists.isEmpty(cartItems)}">
-                    <form action="/checkouts" method="get">
-                        <button type="submit" class="btn btn-primary">Lanjutkan Pembayaran</button>
+                    <form action="/checkouts" method="post">
+                        <input type="hidden" name="voucherCode" th:value="${voucherCode}">
+                        <button type="submit" class="btn btn-primary">Checkout Sekarang</button>
                     </form>
                 </div>
             </div>
-            
         </div>
     </main>
-    
 </body>
 </html>
