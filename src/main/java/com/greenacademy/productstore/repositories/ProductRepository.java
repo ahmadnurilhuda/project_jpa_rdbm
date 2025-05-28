@@ -11,15 +11,26 @@ import com.greenacademy.productstore.models.Product;
 
 public interface ProductRepository extends CrudRepository<Product, Integer> {
 
+    Iterable<Product> findByCategoryId(Integer id);
 
-Iterable<Product> findByCategoryId(Integer id);
-
-//use coalesce
-@Query("SELECT new com.greenacademy.productstore.dto.ProductDTO(p, coalesce(AVG(r.rating), 0.0)) FROM Product p LEFT JOIN Review r ON p.id = r.product.id GROUP BY p.id")
+    // use coalesce
+   @Query("""
+            SELECT new com.greenacademy.productstore.dto.ProductDTO(
+                p,
+                COALESCE(AVG(r.rating), 0.0),
+                COUNT(DISTINCT r.id),
+                COUNT(DISTINCT oi.id)
+            )
+            FROM Product p
+            LEFT JOIN Review r ON p.id = r.product.id
+            LEFT JOIN OrderItem oi ON p.id = oi.product.id
+            LEFT JOIN Order o ON oi.order.id = o.id AND o.status = 'COMPLETED'
+            GROUP BY p.id
+            """)
 Page<ProductDTO> findAll(Pageable pageable);
- 
 
 
-@Query("SELECT p FROM Product p WHERE (:name IS NULL OR p.name LIKE %:name%) AND (:sku IS NULL OR p.sku LIKE %:sku%)")
-Page<Product> findAllByNameAndSku(@Param("name") String name, @Param("sku") String sku, Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE (:name IS NULL OR p.name LIKE %:name%) AND (:sku IS NULL OR p.sku LIKE %:sku%)")
+    Page<Product> findAllByNameAndSku(@Param("name") String name, @Param("sku") String sku, Pageable pageable);
+
 }

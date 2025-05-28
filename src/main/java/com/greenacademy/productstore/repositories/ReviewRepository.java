@@ -14,6 +14,6 @@ public interface ReviewRepository extends CrudRepository<Review, Integer> {
     Page<Review> findByProductId(Integer id, Pageable pageable);    
     Optional<Review> findByOrderItemId(Integer id);
 
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.id = :id")
+    @Query("SELECT COALESCE(AVG(r.rating), 0) FROM Review r WHERE r.product.id = :id")
     Double findAvarageByProductId(Integer id);
 }
