@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.greenacademy.productstore.dto.ProductDTO;
 import com.greenacademy.productstore.models.Product;
 import com.greenacademy.productstore.repositories.ProductRepository;
 
@@ -24,6 +25,10 @@ public class ProductServices {
 
     public Page<Product> getAll(String name, String sku, Pageable pageable) {
         return productRepository.findAllByNameAndSku(name, sku, pageable);
+    }
+
+    public Page<ProductDTO> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public Product getById(Integer id) {

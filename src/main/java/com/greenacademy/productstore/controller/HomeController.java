@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.greenacademy.productstore.dto.ProductDTO;
 import com.greenacademy.productstore.models.Product;
-import com.greenacademy.productstore.models.User;
+
 import com.greenacademy.productstore.services.ProductServices;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -24,11 +24,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(HttpSession session, Model model, Pageable pageable, Product product) {
+    public String index(Model model, Pageable pageable, Product product) {
 
         pageable = PageRequest.of(pageable.getPageNumber(), 10, pageable.getSort());
-        // Page<Product> products = productServices.getAll(product.getName(), product.getSku(), pageable);
-        PagedModel<Product> products = new PagedModel<>(productServices.getAll(product.getName(), product.getSku(), pageable));
+
+        Page<ProductDTO> productDTOs = productServices.getAll(pageable);
+        PagedModel<ProductDTO> products = new PagedModel<>(productDTOs);
 
         model.addAttribute("products", products);
         model.addAttribute("metadata", products.getMetadata());

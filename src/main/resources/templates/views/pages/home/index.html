@@ -6,26 +6,71 @@
 </head>
 <body>
     <main layout:fragment="content">
-        <div class="container my-4">
-            <div class="row">
-                <!-- Loop untuk setiap produk -->
-                <div class="col-md-4 mb-4" th:each="product : ${products.content}">
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-md-4 mb-4" th:each="dpo : ${products.content}">
                 <div class="card h-100">
-                    <img th:src="${product.imageUrl}" class="card-img-top" th:alt="${product.name}">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${product.name}"></h5>
-                        <p class="card-text" th:text="${product.description}"></p>
-                        <p class="card-text" th:text="${product.price}"></p>
-                        <p class="card-text" th:text="${product.quantity}"></p>
-                        <form action="/carts/add" method="post">
-                            <input type="hidden" name="productId" th:value="${product.id}">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                    <img th:src="${dpo.product.imageUrl}" class="card-img-top" th:alt="${dpo.product.name}" style="max-height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title font-weight-bold" th:text="${dpo.product.name}"></h5>
+
+                        <div th:if="${dpo.rating != null}" class="mb-2" th:classappend="${dpo.rating == 0 ? 'opacity-0' : ''}">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i th:class="${i <= dpo.rating ? 'bi bi-star-fill text-warning' : (i - 0.5 <= dpo.rating ? 'bi bi-star-half text-warning' : 'bi bi-star text-secondary')}"></i>
+                            </span>
+                            <span class="ms-1" th:text="${#numbers.formatDecimal(dpo.rating, 1, 1)}"></span>
+                        </div>
+                        <div th:unless="${dpo.rating != null}" class="mb-2">
+                            <p class="text-muted small">No rating yet</p>
+                        </div>
+
+                        <p class="card-text h4 my-2" style="color: #28a745;">
+                            <strong th:text="'$' + ${#numbers.formatDecimal(dpo.product.price, 1, 'COMMA', 2, 'POINT')}"></strong>
+                        </p>
+
+                        <p class="card-text mb-3">
+                            <small class="text-muted" th:text="'Stock: ' + ${dpo.product.quantity}"></small>
+                        </p>
+
+                        <div class="mt-auto">
+                            <form action="/carts/add" method="post" class="d-inline">
+                                <input type="hidden" name="productId" th:value="${dpo.product.id}">
+                                <button type="submit" class="btn btn-success me-1">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </form>
+                            <a th:href="@{/product/detail/{id}(id=${dpo.product.id})}" class="btn btn-outline-primary">
+                                View Detail
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
+    </div>
+
+        <nav aria-label="..." class="mt-5" th:if="${metadata['totalPages'] != 0}">
+            <ul class="pagination justify-content-center" >
+                <li class="page-item">
+                    <a th:href="@{/admin/products(name=${name}, sku=${sku}, sort=${sort}, page=${metadata.number - 1})}"
+                        class="page-link"
+                        th:classappend="${metadata['number'] == 0 ? 'disabled' : ''}"
+                    >Previous</a>
+                </li>
+                <li class="page-item" th:each="page : ${#numbers.sequence(0, metadata.totalPages - 1)}">
+                    <a class="page-link"
+                        th:classappend="${metadata['number'] == page ? 'active' : ''}"
+                        th:href="@{/admin/products(name=${name}, sku=${sku}, sort=${sort}, page=${page})}"
+                        th:text="${page + 1}"></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                        th:classappend="${metadata['number'] == metadata['totalPages'] - 1 ? 'disabled' : ''}"
+                        th:href="@{/admin/products(name=${name}, sku=${sku}, sort=${sort}, page=${metadata.number + 1})}"
+                    >Next</a>
+                </li>
+            </ul>
+        </nav>
     </main>
 </body>
 </html>

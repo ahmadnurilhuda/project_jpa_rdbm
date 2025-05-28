@@ -42,18 +42,47 @@
                             <th>Harga</th>
                             <th>Qty</th>
                             <th>Subtotal</th>
+                            <th>Rating & Review</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="item, iterStat : ${orderItems}">
                             <td th:text="${iterStat.count}">1</td>
                             <td>
-                                <img width="50" src="" th:src="${item.product.imageUrl}" class="img-fluid" th:alt="${item.product.name}">
-                                <span th:text="${item.product.name}"></span>
+                                <img width="50" src="" th:src="${item.orderItem.product.imageUrl}" class="img-fluid" th:alt="${item.orderItem.product.name}">
+                                <span th:text="${item.orderItem.product.name}"></span>
                             </td>
-                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
-                            <td th:text="${item.quantity}">2</td>
-                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT')}"></td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.orderItem.product.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${item.orderItem.quantity}">2</td>
+                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item.orderItem.product.price * item.orderItem.quantity, 0, 'COMMA', 0, 'POINT')}"></td>
+                            <td class="text-center">
+                                <form action="/reviews" method="post" th:if="${item.orderItem.order.status.name == 'COMPLETED' && item.isReviewed == false}">
+                                    <div>
+                                        <div class="star-rating animated-stars">
+                                            <input type="radio" id="star5" name="rating" value="5">
+                                            <label for="star5" class="bi bi-star-fill"></label>
+                                            <input type="radio" id="star4" name="rating" value="4">
+                                            <label for="star4" class="bi bi-star-fill"></label>
+                                            <input type="radio" id="star3" name="rating" value="3">
+                                            <label for="star3" class="bi bi-star-fill"></label>
+                                            <input type="radio" id="star2" name="rating" value="2">
+                                            <label for="star2" class="bi bi-star-fill"></label>
+                                            <input type="radio" id="star1" name="rating" value="1">
+                                            <label for="star1" class="bi bi-star-fill"></label>
+                                        </div>
+                                        <div>
+                                            <input type="hidden" name="product" th:value="${item.orderItem.product.id}">
+                                            <input type="hidden" name="orderItem" th:value="${item.orderItem.id}">
+
+                                            <textarea name="content" id="" placeholder="Masukkan Review" cols="30" rows="2">
+                                            </textarea>
+                                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- <div th:if="${item.isReviewed != false}"><span class="badge bg-success">Reviewed</span></div> -->
+                            </td>
+
                         </tr>
                     </tbody>
                     <tfoot>
