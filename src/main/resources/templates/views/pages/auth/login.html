@@ -16,8 +16,12 @@
               >
                 <h3 class="mb-0">Login</h3>
               </div>
-               <div th:if="${error}" class="alert alert-success" role="alert">
+               <div th:if="${error}" class="alert alert-danger" role="alert">
                     <span th:text="${error}"></span>
+                </div>
+
+                <div th:if="${success}" class="alert alert-success" role="alert">
+                    <span th:text="${success}"></span>
                 </div>
 
               <div class="card-body p-4">
@@ -49,9 +53,15 @@
                     </button>
                   </div>
 
+                  <div class="mt-3 d-flex justify-content-center align-items-center gap-2">
                   <p class="text-center mt-3 mb-0">
-                    belum punya akun <a href="/register">Register Here</a>
+                    Don't have an account? <a href="/register">Register Here</a>
+                    
                   </p>
+                  <p class="text-center mt-3 mb-0">
+                    Forgot Password? <a href="/forgot-password">Reset Password</a>
+                  </p>
+                  </div>
                 </form>
               </div>
             </div>

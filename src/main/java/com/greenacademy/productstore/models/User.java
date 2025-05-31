@@ -1,6 +1,7 @@
 package com.greenacademy.productstore.models;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -37,6 +38,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    private Instant verified_at;
+
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+    @Column(name = "expired_token_at")
+    private LocalDateTime expiredToken_at;
 
     @CreationTimestamp
     private Instant created_at;
@@ -115,8 +124,28 @@ public class User {
         this.updated_at = updated_at;
     }
 
+    public Instant getVerified_at() {
+        return verified_at;
+    }
 
+    public void setVerified_at(Instant verified_at) {
+        this.verified_at = verified_at;
+    }
 
-    
-    
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
+    public LocalDateTime getExpiredToken_at() {
+        return expiredToken_at;
+    }
+
+    public void setExpiredToken_at(LocalDateTime expiredToken_at) {
+        this.expiredToken_at = expiredToken_at;
+    }
+ 
 }

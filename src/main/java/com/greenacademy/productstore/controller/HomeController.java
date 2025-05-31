@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.greenacademy.productstore.dto.ProductDTO;
 import com.greenacademy.productstore.models.Product;
-
+import com.greenacademy.productstore.services.EmailServices;
 import com.greenacademy.productstore.services.ProductServices;
+
+import jakarta.validation.constraints.Email;
 
 
 @Controller
 public class HomeController {
 
-    ProductServices productServices;
+    private ProductServices productServices;
+    private EmailServices emailServices;
 
-    public HomeController(ProductServices productServices) {
+
+    public HomeController(ProductServices productServices, EmailServices emailServices) {
         this.productServices = productServices;
+        this.emailServices = emailServices;
     }
 
     @GetMapping("/")
@@ -33,6 +38,8 @@ public class HomeController {
 
         model.addAttribute("products", products);
         model.addAttribute("metadata", products.getMetadata());
+
+
         return "pages/home/index";
     }
 }

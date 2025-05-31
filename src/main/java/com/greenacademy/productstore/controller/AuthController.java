@@ -38,7 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String signIn(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String signIn(@RequestParam("email") String email, @RequestParam("password") String password,
+            HttpSession session, RedirectAttributes redirectAttributes) {
 
         try {
             User user = userServices.login(email, password);
@@ -47,12 +48,12 @@ public class AuthController {
                 session.setAttribute("user", user);
                 session.setAttribute("userRole", user.getRole().toString());
 
-                System.out.println("\n\n\nUser role: " + user.getRole()+"\n\n\n");
-                System.out.println("\n\n\nUser username: " + user.getUsername()+"\n\n\n");
+                System.out.println("\n\n\nUser role: " + user.getRole() + "\n\n\n");
+                System.out.println("\n\n\nUser username: " + user.getUsername() + "\n\n\n");
 
                 String prevPage = (String) session.getAttribute("prevPage");
                 String prevMethod = (String) session.getAttribute("prevMethod");
-                if(prevPage != null && prevMethod != null && prevMethod.equals("GET")) {
+                if (prevPage != null && prevMethod != null && prevMethod.equals("GET")) {
                     return "redirect:" + prevPage;
                 }
             }
@@ -60,7 +61,7 @@ public class AuthController {
             return "redirect:/";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Email or Password is incorrect");
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/login";
         }
     }
@@ -84,7 +85,8 @@ public class AuthController {
 
         userServices.register(user);
 
-        redirectAttributes.addFlashAttribute("success", "Registration successful!");
+        redirectAttributes.addFlashAttribute("success",
+                "Registration successful! Please check Your Email to Verification");
         return "redirect:/register";
     }
 
@@ -92,5 +94,62 @@ public class AuthController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/verify/{token}")
+    public String verify(@PathVariable("token") String token, RedirectAttributes redirectAttributes) {
+
+        try {
+            userServices.verifyAccount(token);
+            redirectAttributes.addFlashAttribute("success", "Account verified successfully!");
+            return "redirect:/login";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/login";
+        }
+    }
+
+    @GetMapping("/forgot-password")
+    public String forgotPassword() {
+        return "pages/auth/forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        try {
+            userServices.forgotPassword(email);
+            redirectAttributes.addFlashAttribute("success", "Link to reset password has been sent to your email");
+            return "redirect:/forgot-password";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/forgot-password";
+        }
+    }
+
+    @GetMapping("/reset-password/{token}")
+    public String resetPassword(@PathVariable("token") String token, Model model, RedirectAttributes redirectAttributes) {
+
+        try {
+            userServices.verificationResetPassword(token);
+            model.addAttribute("token", token);
+            redirectAttributes.addFlashAttribute("success", "Verification token has been reset successfully!");
+            return "pages/auth/reset-password";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "pages/auth/reset-password";
+        }
+    }
+
+    @PostMapping("/reset-password/{token}")
+    public String resetPassword(@PathVariable("token") String token, @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword, RedirectAttributes redirectAttributes) {
+        try {
+            userServices.resetPassword(token, newPassword, confirmPassword);
+            redirectAttributes.addFlashAttribute("success", "Password has been reset successfully!");
+            return "redirect:/login";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/reset-password/" + token;
+        }
     }
 }
